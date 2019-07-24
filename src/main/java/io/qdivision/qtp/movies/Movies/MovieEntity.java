@@ -1,5 +1,6 @@
-package io.qdivision.qtp.movies;
+package io.qdivision.qtp.movies.Movies;
 
+import io.qdivision.qtp.movies.Names.NameEntity;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,5 +1,6 @@
-package io.qdivision.qtp.movies;
+package io.qdivision.qtp.movies.Names;
 
+import io.qdivision.qtp.movies.LikedStatus;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,4 +27,6 @@ public class NameEntity {
     private String primaryProfession;
     private String knownForTitles;
 
+    @Enumerated(EnumType.STRING)
+    private LikedStatus likedStatus;
 }

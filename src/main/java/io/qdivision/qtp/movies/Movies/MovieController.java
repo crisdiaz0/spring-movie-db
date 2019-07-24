@@ -1,5 +1,7 @@
-package io.qdivision.qtp.movies;
+package io.qdivision.qtp.movies.Movies;
 
+import io.qdivision.qtp.movies.Names.Name;
+import io.qdivision.qtp.movies.Names.NameEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.stream.Collectors;
 public class MovieController {
 
     private final MovieRepository movieRepository;
+
 
     public MovieController(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
@@ -92,6 +95,7 @@ public class MovieController {
                 .deathYear(name.getDeathYear())
                 .primaryProfession(name.getPrimaryProfession())
                 .knownForTitles(name.getKnownForTitles())
+                .likedStatus(name.getLikedStatus())
                 .build();
     }
 
@@ -104,6 +108,7 @@ public class MovieController {
                 .deathYear(nameEntity.getDeathYear())
                 .primaryProfession(nameEntity.getPrimaryProfession())
                 .knownForTitles(nameEntity.getKnownForTitles())
+                .likedStatus(nameEntity.getLikedStatus())
                 .build();
     }
 }

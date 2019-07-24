@@ -1,5 +1,6 @@
-package io.qdivision.qtp.movies;
+package io.qdivision.qtp.movies.Movies;
 
+import io.qdivision.qtp.movies.Names.Name;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
