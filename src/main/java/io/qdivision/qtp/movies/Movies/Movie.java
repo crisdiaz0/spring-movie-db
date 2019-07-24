@@ -23,6 +23,7 @@ public class Movie {
     private Integer runtimeMinutes;
     private String genres;
     private boolean favorite;
+    private Integer rating;
 
     private List<Name> names;
 }

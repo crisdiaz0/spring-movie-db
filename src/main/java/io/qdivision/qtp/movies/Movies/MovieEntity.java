@@ -28,6 +28,7 @@ public class MovieEntity {
     private Integer runtimeMinutes;
     private String genres;
     private boolean favorite;
+    private Integer rating;
 
     @OneToMany
     @JoinTable(

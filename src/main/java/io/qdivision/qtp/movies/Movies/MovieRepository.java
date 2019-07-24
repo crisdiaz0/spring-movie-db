@@ -15,4 +15,6 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     List<MovieEntity> findMoviesYearRange(@Param("beginRange") Integer beginRange, @Param("endRange") Integer endRange);
 
     List<MovieEntity> findByPrimaryTitleContainingIgnoreCase(String searchValue);
+
+    List<MovieEntity> findByRating(Integer rating);
 }

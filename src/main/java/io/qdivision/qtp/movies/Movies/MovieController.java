@@ -1,7 +1,9 @@
 package io.qdivision.qtp.movies.Movies;
 
+import io.qdivision.qtp.movies.LikedStatus;
 import io.qdivision.qtp.movies.Names.Name;
 import io.qdivision.qtp.movies.Names.NameEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("movies")
+@Slf4j
 public class MovieController {
 
     private final MovieRepository movieRepository;
@@ -55,6 +58,37 @@ public class MovieController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/ratings/{rating}")
+    public List<Movie> findMoviesByRating(@PathVariable("rating") Integer rating) {
+        return movieRepository.findByRating(rating)
+                .stream()
+                .map(this::toMovie)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/favoriteNames")
+    public List<Name> findLikedNamesInFavoriteMovies() {
+        List<Movie> unfilteredList = this.findIsFavorite();
+
+        return unfilteredList.get(0).getNames()
+                .stream()
+                .filter(name -> name.getLikedStatus().equals(LikedStatus.LIKED))
+                .collect(Collectors.toList());
+
+//        return unfilteredList.stream()
+//                .forEach();
+
+//        movie.getNames().filter(name -> name.getLikedStatus.equals(LikeStatus.LIKED)
+
+    }
+
+    @PutMapping("/{id}/rating/{rating}")
+    public Movie updateRating(@PathVariable("id") Long id, @PathVariable("rating") Integer rating) {
+        MovieEntity movieToBeUpdated = toMovieEntity(findById(id));
+        movieToBeUpdated.setRating(rating);
+        return toMovie(movieRepository.saveAndFlush(movieToBeUpdated));
+    }
+
     @PutMapping("/{id}/favorite")
     public Movie toggleFavorite(@PathVariable("id") Long id) {
         MovieEntity movieToBeUpdated = toMovieEntity(findById(id));
@@ -74,6 +108,7 @@ public class MovieController {
                 .runtimeMinutes(movieEntity.getRuntimeMinutes())
                 .genres(movieEntity.getGenres())
                 .favorite(movieEntity.isFavorite())
+                .rating(movieEntity.getRating())
                 .names(movieEntity.getNames()
                         .stream()
                         .map(this::toName)
@@ -93,6 +128,7 @@ public class MovieController {
                 .runtimeMinutes(movie.getRuntimeMinutes())
                 .genres(movie.getGenres())
                 .favorite(movie.isFavorite())
+                .rating(movie.getRating())
                 .names(movie.getNames()
                         .stream()
                         .map(this::toNameEntity)
