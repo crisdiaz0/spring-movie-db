@@ -21,6 +21,7 @@ public class Movie {
     private Integer startYear;
     private Integer runtimeMinutes;
     private String genres;
+    private boolean favorite;
 
     private List<Name> names;
 }

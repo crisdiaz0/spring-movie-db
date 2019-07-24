@@ -1,8 +1,6 @@
 package io.qdivision.qtp.movies;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +23,28 @@ public class MovieController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping
+    @RequestMapping("/{id}")
+    public Movie findById(@PathVariable("id") Long id) {
+        return toMovie(movieRepository.findById(id).orElseThrow(() -> new RuntimeException("Movie not found")));
+    }
+
+    @GetMapping
+    @RequestMapping("/favorites")
+    public List<Movie> findIsFavorite() {
+        return movieRepository.findByFavoriteIsTrue()
+                .stream()
+                .map(this::toMovie)
+                .collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}/favorite")
+    public Movie toggleFavorite(@PathVariable("id") Long id) {
+        MovieEntity movieToBeUpdated = toMovieEntity(findById(id));
+        movieToBeUpdated.setFavorite(!movieToBeUpdated.isFavorite());
+        return toMovie(movieRepository.saveAndFlush(movieToBeUpdated));
+    }
+
     private Movie toMovie(MovieEntity movieEntity) {
         return Movie.builder()
                 .id(movieEntity.getId())
@@ -36,6 +56,7 @@ public class MovieController {
                 .startYear(movieEntity.getStartYear())
                 .runtimeMinutes(movieEntity.getRuntimeMinutes())
                 .genres(movieEntity.getGenres())
+                .favorite(movieEntity.isFavorite())
                 .names(movieEntity.getNames()
                         .stream()
                         .map(this::toName)
@@ -54,6 +75,7 @@ public class MovieController {
                 .startYear(movie.getStartYear())
                 .runtimeMinutes(movie.getRuntimeMinutes())
                 .genres(movie.getGenres())
+                .favorite(movie.isFavorite())
                 .names(movie.getNames()
                         .stream()
                         .map(this::toNameEntity)
