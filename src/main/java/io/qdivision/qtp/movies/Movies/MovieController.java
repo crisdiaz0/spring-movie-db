@@ -26,16 +26,30 @@ public class MovieController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     public Movie findById(@PathVariable("id") Long id) {
         return toMovie(movieRepository.findById(id).orElseThrow(() -> new RuntimeException("Movie not found")));
     }
 
-    @GetMapping
-    @RequestMapping("/favorites")
+    @GetMapping("/favorites")
     public List<Movie> findIsFavorite() {
         return movieRepository.findByFavoriteIsTrue()
+                .stream()
+                .map(this::toMovie)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/range/{beginRange}/{endRange}")
+    public List<Movie> findMoviesDateRange(@PathVariable("beginRange") Integer beginRange, @PathVariable("endRange") Integer endRange) {
+        return movieRepository.findMoviesYearRange(beginRange, endRange)
+                .stream()
+                .map(this::toMovie)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/titles/{searchValue}")
+    public List<Movie> findMoviesTitleSearch(@PathVariable("searchValue") String searchValue) {
+        return movieRepository.findByPrimaryTitleContainingIgnoreCase(searchValue)
                 .stream()
                 .map(this::toMovie)
                 .collect(Collectors.toList());

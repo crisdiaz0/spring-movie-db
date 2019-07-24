@@ -2,6 +2,9 @@ package io.qdivision.qtp.movies.Names;
 
 import io.qdivision.qtp.movies.LikedStatus;
 import lombok.*;
+import org.flywaydb.core.internal.database.postgresql.PostgreSQLType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.ArrayList;
