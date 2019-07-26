@@ -1,11 +1,11 @@
 package io.qdivision.qtp.movies.Movies;
 
-import io.qdivision.qtp.movies.LikedStatus;
 import io.qdivision.qtp.movies.Names.Name;
 import io.qdivision.qtp.movies.Names.NameEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,21 +66,20 @@ public class MovieController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/favoriteNames")
-    public List<Name> findLikedNamesInFavoriteMovies() {
-        List<Movie> unfilteredList = this.findIsFavorite();
-
-        return unfilteredList.get(0).getNames()
-                .stream()
-                .filter(name -> name.getLikedStatus().equals(LikedStatus.LIKED))
-                .collect(Collectors.toList());
-
-//        return unfilteredList.stream()
-//                .forEach();
-
-//        movie.getNames().filter(name -> name.getLikedStatus.equals(LikeStatus.LIKED)
-
-    }
+//    @GetMapping("/favoriteMoviesLikedNames")
+//    public List<Movie> findFavoriteMoviesWithLikedNames() {
+//        List<MovieEntity> unfilteredList = movieRepository.findFavoriteMoviesWithLikedNames();
+//        List<MovieEntity> filteredList = new ArrayList<>();
+//        for (MovieEntity movie : unfilteredList) {
+//            if (!filteredList.contains(movie)){
+//                filteredList.add(movie);
+//            }
+//        }
+//        return filteredList
+//                .stream()
+//                .map(this::toMovie)
+//                .collect(Collectors.toList());
+//    }
 
     @PutMapping("/{id}/rating/{rating}")
     public Movie updateRating(@PathVariable("id") Long id, @PathVariable("rating") Integer rating) {
@@ -95,6 +94,7 @@ public class MovieController {
         movieToBeUpdated.setFavorite(!movieToBeUpdated.isFavorite());
         return toMovie(movieRepository.saveAndFlush(movieToBeUpdated));
     }
+
 
     private Movie toMovie(MovieEntity movieEntity) {
         return Movie.builder()

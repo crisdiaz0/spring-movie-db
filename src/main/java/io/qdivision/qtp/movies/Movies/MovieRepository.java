@@ -17,4 +17,7 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
     List<MovieEntity> findByPrimaryTitleContainingIgnoreCase(String searchValue);
 
     List<MovieEntity> findByRating(Integer rating);
+
+//    @Query("from movie m inner join title_name tn on m.id = tn.title_id INNER JOIN name n on n.id = tn.name_id and n.liked_status='LIKED' and m.favorite = true")
+//    List<MovieEntity> findFavoriteMoviesWithLikedNames();
 }
